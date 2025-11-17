@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,18 +23,18 @@ const Navbar = () => {
       }`}
     >
       {/* Logo */}
-      <h2 className="font-display text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-600">
+      <Link to="/" className="font-display text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-600">
         THE GYRO GUYS
-      </h2>
+      </Link>
 
       {/* Desktop Links */}
       <div className="hidden md:flex items-center gap-6 mr-12">
-        <a href="Menu" className="font-body text-lg text-white hover:text-orange-400 transition-colors">
+        <Link to="/menu" className="font-body text-lg text-white hover:text-orange-400 transition-colors">
           Menu
-        </a>
-        <a href="#location" className="font-body text-lg text-white hover:text-orange-400 transition-colors">
+        </Link>
+        <Link to="/#location" className="font-body text-lg text-white hover:text-orange-400 transition-colors">
           Location
-        </a>
+        </Link>
         <a
           href="https://order.online/store/gyro-guys-houston-441834/?hideModal=true"
           target="_blank"
@@ -78,20 +79,20 @@ const Navbar = () => {
       {isOpen && (
         <div className="absolute top-full left-0 w-full bg-gray-900 md:hidden">
           <div className="flex flex-col items-center gap-6 py-8">
-            <a
-              href="Menu"
+            <Link
+              to="/menu"
               className="font-body text-xl text-white hover:text-orange-400 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               Menu
-            </a>
-            <a
-              href="#location"
+            </Link>
+            <Link
+              to="/#location"
               className="font-body text-xl text-white hover:text-orange-400 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               Location
-            </a>
+            </Link>
             <a
               href="https://order.online/store/gyro-guys-houston-441834/?hideModal=true"
               target="_blank"

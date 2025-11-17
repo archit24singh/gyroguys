@@ -1,6 +1,3 @@
-import Navbar from './Navbar';
-import Footer from './Footer';
-
 const Menu = () => {
   const menuItems = [
     {
@@ -36,11 +33,7 @@ const Menu = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-900">
-      <Navbar />
-
-      {/* Menu Section */}
-      <section className="relative overflow-hidden text-white pt-32 pb-16 px-8">
+    <section className="relative overflow-hidden text-white pb-16 px-8">
         {/* Page Title */}
         <div className="max-w-6xl mx-auto mb-16">
           <h1 className="font-display text-5xl md:text-6xl lg:text-8xl font-bold text-center mb-6 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-600">
@@ -93,9 +86,6 @@ const Menu = () => {
           ))}
         </div>
       </section>
-
-      <Footer />
-    </div>
   );
 };
 

@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
 import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Showcase from './components/Showcase';
-import Footer from './components/Footer';
-import Menu from './components/Menu';
+import Home from './pages/Home';
+import MenuPage from './pages/MenuPage';
 function App() {
   useEffect(() => {
     // Initialize Lenis smooth scroll
@@ -36,12 +35,15 @@ function App() {
   }, []);
 
   return (
-    <main className="relative w-full">
-      <Navbar />
-      <Hero />
-      <Showcase />
-      <Footer />
-    </main>
+    <BrowserRouter>
+      <div className="relative w-full">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/menu" element={<MenuPage />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 
