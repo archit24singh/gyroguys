@@ -101,17 +101,59 @@ const Hero = () => {
 
       // Mobile animations (max-width: 767px)
       mm.add("(max-width: 767px)", () => {
-        // Fade out title on scroll
-        gsap.to('.hero-title-text', {
-          opacity: 0,
-          y: -50,
-          ease: 'power1.in',
+        // Create timeline with ScrollTrigger for mobile
+        const tlMobile = gsap.timeline({
           scrollTrigger: {
             trigger: section,
             start: 'top top',
-            end: '50% top',
+            end: 'bottom bottom',
             scrub: true,
+            markers: false,
+            pinSpacing: false,
           }
+        });
+
+        // Scrub through video based on scroll (MOBILE)
+        tlMobile.to(video, {
+          currentTime: video.duration,
+          ease: 'none',
+        }, 0);
+
+        // Fade out title on scroll
+        tlMobile.to('.hero-title-text', {
+          opacity: 0,
+          y: -50,
+          ease: 'power1.in',
+        }, "<5%");
+
+        // Animate facts appearing and disappearing
+        facts.forEach((_, index) => {
+          const startProgress = (index + 1) * 0.25; // 25%, 50%
+
+          tlMobile.fromTo(`.fact-${index}`,
+            {
+              opacity: 0,
+              y: 30,
+            },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.15,
+              ease: 'power2.out',
+            },
+            startProgress
+          );
+
+          // Fade out fact
+          tlMobile.to(`.fact-${index}`,
+            {
+              opacity: 0,
+              y: -30,
+              duration: 0.1,
+              ease: 'power2.in',
+            },
+            startProgress + 0.15
+          );
         });
       });
     };
@@ -142,8 +184,6 @@ const Hero = () => {
           muted
           playsInline
           preload="auto"
-          autoPlay={isMobile}
-          loop={isMobile}
           className="absolute inset-0 w-full h-full object-cover -z-10"
         />
 
@@ -161,14 +201,14 @@ const Hero = () => {
             Fresh. Healthy. Fast.
           </p>
 
-          {/* Facts container - Desktop only */}
-          <div className="relative w-full max-w-4xl h-32 hidden md:block">
+          {/* Facts container */}
+          <div className="relative w-full max-w-4xl h-32">
             {facts.map((fact, index) => {
               const isRight = index % 2 === 0;
               return (
                 <p
                   key={index}
-                  className={`fact-${index} absolute top-0 ${isRight ? 'right-[10%]' : 'left-[10%]'} text-4xl md:text-6xl font-display font-bold leading-tight opacity-0`}
+                  className={`fact-${index} absolute top-0 ${isRight ? 'right-[5%] md:right-[10%]' : 'left-[5%] md:left-[10%]'} text-2xl md:text-4xl lg:text-6xl font-display font-bold leading-tight opacity-0 text-center md:text-left px-4 md:px-0`}
                   style={{
                     backgroundImage: 'linear-gradient(to right, #fb923c, #dc2626)',
                     WebkitBackgroundClip: 'text',

@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -9,12 +9,18 @@ gsap.registerPlugin(ScrollTrigger);
 const Showcase = () => {
   const containerRef = useRef(null);
   const bgRef = useRef(null);
-  const ingredientRef = useRef(null);
-  const pitaRef = useRef(null);
-  const meatRef = useRef(null);
-  const veggiesRef = useRef(null);
-  const sauceRef = useRef(null);
+  const ingredientsRef = useRef(null);
   const menuGridRef = useRef(null);
+  const menuScrollRef = useRef(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Ingredients data
+  const ingredients = [
+    { name: 'Pita Bread', img: '/assets/images/pitabread.jpg' },
+    { name: 'Gyro Meat', img: '/assets/images/meat.jpg' },
+    { name: 'Fresh Veggies', img: '/assets/images/veggies.jpg' },
+    { name: 'Tzatziki Sauce', img: '/assets/images/tzatziki.jpg' }
+  ];
 
   // Menu data with images
   const menuItems = [
@@ -26,137 +32,65 @@ const Showcase = () => {
     { name: 'Baklava', img: '/assets/images/baklava.avif' }
   ];
 
+  // Arrow navigation functions
+  const itemsPerView = 3;
+  const maxIndex = Math.max(0, menuItems.length - itemsPerView);
+
+  const scrollLeft = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    } else {
+      // Loop to end
+      setCurrentIndex(maxIndex);
+    }
+  };
+
+  const scrollRight = () => {
+    if (currentIndex < maxIndex) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      // Loop to beginning
+      setCurrentIndex(0);
+    }
+  };
+
   useGSAP(() => {
-    // Create matchMedia for responsive animations
-    const mm = gsap.matchMedia();
-
-    // Desktop animations (min-width: 768px)
-    mm.add("(min-width: 768px)", () => {
-      // Background Parallax Effect (Desktop only)
-      gsap.to(bgRef.current, {
-        yPercent: -30,
-        ease: "none",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true
-        }
-      });
-
-      // Ingredient Assembly Animation with Pin
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: ingredientRef.current,
-          start: 'top top',
-          end: '+=200%',
-          pin: true,
-          scrub: 1,
-          markers: false,
-        }
-      });
-
-      // Set initial positions (off-screen)
-      gsap.set(pitaRef.current, {
-        y: '100vh',
-        rotation: -45,
-        opacity: 0,
-      });
-
-      gsap.set(meatRef.current, {
-        x: '-100vw',
-        rotation: -90,
-        opacity: 0,
-      });
-
-      gsap.set(veggiesRef.current, {
-        x: '100vw',
-        rotation: 90,
-        opacity: 0,
-      });
-
-      gsap.set(sauceRef.current, {
-        y: '-100vh',
-        scale: 3,
-        opacity: 0,
-      });
-
-      // Animate ingredients to center with sequential overlaps
-      tl.to(pitaRef.current, {
-        y: 0,
-        rotation: 0,
-        opacity: 1,
-        duration: 1,
-        ease: 'back.out(1.2)',
-      }, 0)
-      .to(meatRef.current, {
-        x: 0,
-        rotation: 0,
-        opacity: 1,
-        duration: 1,
-        ease: 'back.out(1.2)',
-      }, '<0.2')
-      .to(veggiesRef.current, {
-        x: 0,
-        rotation: 0,
-        opacity: 1,
-        duration: 1,
-        ease: 'back.out(1.2)',
-      }, '<0.2')
-      .to(sauceRef.current, {
-        y: 0,
-        scale: 1,
-        rotation: 0,
-        opacity: 1,
-        duration: 1,
-        ease: 'back.out(1.2)',
-      }, '<0.2');
-
-      // Menu Cards Scroll-In Animation
-      gsap.from(".menu-card", {
-        y: 100,
-        opacity: 0,
-        stagger: 0.1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: menuGridRef.current,
-          start: "top 80%"
-        }
-      });
+    // Background Parallax Effect
+    gsap.to(bgRef.current, {
+      yPercent: -30,
+      ease: "none",
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true
+      }
     });
 
-    // Mobile animations (max-width: 767px)
-    mm.add("(max-width: 767px)", () => {
-      // Simple fade-in for ingredients (no pin, no scrub)
-      gsap.from([pitaRef.current, meatRef.current, veggiesRef.current, sauceRef.current], {
-        opacity: 0,
-        scale: 0.8,
-        duration: 1,
-        stagger: 0.2,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: ingredientRef.current,
-          start: 'top 60%',
-        }
-      });
-
-      // Simple fade-in for menu cards
-      gsap.from(".menu-card", {
-        y: 50,
-        opacity: 0,
-        stagger: 0.15,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: menuGridRef.current,
-          start: "top 80%"
-        }
-      });
+    // Ingredients Scroll-In Animation (horizontal slide from left)
+    gsap.from(".ingredient-item", {
+      x: -100,
+      opacity: 0,
+      stagger: 0.15,
+      duration: 1,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: ingredientsRef.current,
+        start: "top 80%"
+      }
     });
 
-    return () => {
-      mm.revert();
-    };
-
+    // Menu Cards Scroll-In Animation
+    gsap.from(".menu-card", {
+      y: 100,
+      opacity: 0,
+      stagger: 0.1,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: menuGridRef.current,
+        start: "top 80%"
+      }
+    });
   }, { scope: containerRef });
 
   return (
@@ -164,77 +98,104 @@ const Showcase = () => {
       {/* Parallax Background */}
       <div ref={bgRef} className="absolute inset-0 -z-10 bg-gray-900 h-[150%]"></div>
 
-      {/* Part 1: Ingredients Assembly */}
-      <div
-        ref={ingredientRef}
-        className="relative z-10 h-screen w-full overflow-hidden flex items-center justify-center"
-      >
-        {/* Title */}
-        <div className="absolute top-20 left-1/2 -translate-x-1/2 z-50 px-4">
-          <h2 className="font-display text-4xl md:text-5xl lg:text-7xl font-bold text-center drop-shadow-lg bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-600">
-            Freshness You Can Taste
-          </h2>
-          <p className="font-body text-base md:text-lg lg:text-xl text-white/90 text-center mt-4">
-            Watch as tradition comes together
-          </p>
-        </div>
-
-        {/* Ingredient Layers */}
-        <div className="relative w-full h-full flex items-center justify-center">
-          {/* Layer 1: Pita (Bottom) */}
-          <img
-            ref={pitaRef}
-            src="/assets/images/pitabread.jpg"
-            alt="Pita Bread"
-            className="absolute z-10 w-[60vw] md:w-[25vw] object-contain rounded-xl"
-          />
-
-          {/* Layer 2: Meat */}
-          <img
-            ref={meatRef}
-            src="/assets/images/meat.jpg"
-            alt="Gyro Meat"
-            className="absolute z-20 w-[55vw] md:w-[23vw] object-contain rounded-xl"
-          />
-
-          {/* Layer 3: Veggies */}
-          <img
-            ref={veggiesRef}
-            src="/assets/images/veggies.jpg"
-            alt="Fresh Vegetables"
-            className="absolute z-30 w-[30vw] md:w-[15vw] object-contain rounded-xl"
-          />
-
-          {/* Layer 4: Sauce (Top) */}
-          <img
-            ref={sauceRef}
-            src="/assets/images/tzatziki.jpg"
-            alt="Tzatziki Sauce"
-            className="absolute z-40 w-[20vw] md:w-[10vw] object-contain rounded-xl"
-          />
+      {/* Part 1: Ingredients */}
+      <div ref={ingredientsRef} className="relative z-10 w-full py-24 px-8">
+        <h2 className="font-display text-4xl md:text-5xl lg:text-7xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-600">
+          Our Fresh Ingredients
+        </h2>
+        <div className="flex flex-wrap justify-center gap-8 md:gap-12 max-w-6xl mx-auto">
+          {ingredients.map((ingredient, index) => (
+            <div key={index} className="ingredient-item flex flex-col items-center">
+              <img
+                src={ingredient.img}
+                alt={ingredient.name}
+                className="w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 object-cover rounded-xl shadow-2xl hover:scale-110 transition-transform duration-300"
+              />
+              <p className="font-display text-xl md:text-2xl font-bold mt-4 text-white">
+                {ingredient.name}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
 
       {/* Part 2: Menu */}
       <div className="flex flex-col items-center w-full py-24 px-8">
         {/* Menu Title */}
-        <h2 className="font-display text-5xl md:text-6xl lg:text-8xl font-bold mb-160 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-600 text-center">
+        <h2 className="font-display text-5xl md:text-6xl lg:text-8xl font-bold mb-16 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-600 text-center">
           Our Menu
         </h2>
 
-        {/* Menu Grid - Responsive: 1 column mobile, 2-3 columns desktop */}
-        <div ref={menuGridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-6xl">
-          {menuItems.map((item, index) => (
-            <div key={index} className="menu-card space-y-4">
-              <img
-                src={item.img}
-                alt={item.name}
-                className="w-full h-80 object-cover rounded-lg shadow-2xl hover:scale-105 transition-transform duration-300"
-              />
-              <h3 className="text-xl md:text-2xl lg:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-600 text-center">
-                {String(index + 1).padStart(2, '0')}. {item.name}
-              </h3>
+        {/* Menu Scroll Container with Arrows */}
+        <div className="relative w-full max-w-7xl flex items-center gap-4 md:gap-8">
+          {/* Left Arrow */}
+          <button
+            onClick={scrollLeft}
+            className="flex-shrink-0 bg-gradient-to-r from-orange-500 to-red-600 text-white p-3 md:p-4 rounded-full hover:scale-110 transition-transform duration-300 shadow-2xl"
+            aria-label="Previous menu items"
+          >
+            <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          {/* Scrollable Menu Container */}
+          <div className="flex-1 overflow-hidden">
+            <div
+              ref={menuScrollRef}
+              className="flex gap-4 md:gap-6 transition-transform duration-700 ease-out"
+              style={{
+                transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)`
+              }}
+            >
+              {menuItems.map((item, index) => (
+                <div
+                  key={index}
+                  className="menu-card flex-shrink-0"
+                  style={{ width: `calc(${100 / itemsPerView}% - ${(itemsPerView - 1) * 1}rem)` }}
+                >
+                  <div className="relative h-48 md:h-56 lg:h-64 rounded-lg overflow-hidden shadow-2xl group">
+                    <img
+                      src={item.img}
+                      alt={item.name}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-4 md:p-6">
+                      <h3 className="text-lg md:text-xl lg:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-600">
+                        {String(index + 1).padStart(2, '0')}. {item.name}
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
+          </div>
+
+          {/* Right Arrow */}
+          <button
+            onClick={scrollRight}
+            className="flex-shrink-0 bg-gradient-to-r from-orange-500 to-red-600 text-white p-3 md:p-4 rounded-full hover:scale-110 transition-transform duration-300 shadow-2xl"
+            aria-label="Next menu items"
+          >
+            <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Progress Indicator */}
+        <div className="flex justify-center gap-2 mt-8">
+          {Array.from({ length: maxIndex + 1 }).map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                index === currentIndex
+                  ? 'bg-gradient-to-r from-orange-500 to-red-600 w-8'
+                  : 'bg-white/30 hover:bg-white/50'
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
           ))}
         </div>
       </div>
