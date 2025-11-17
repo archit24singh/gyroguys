@@ -5,7 +5,7 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Showcase from './components/Showcase';
 import Footer from './components/Footer';
-
+import Menu from './components/Menu';
 function App() {
   useEffect(() => {
     // Initialize Lenis smooth scroll
