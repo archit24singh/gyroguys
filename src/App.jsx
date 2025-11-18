@@ -5,6 +5,7 @@ import 'lenis/dist/lenis.css';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import MenuPage from './pages/MenuPage';
+import LocationsPage from './pages/LocationsPage';
 function App() {
   useEffect(() => {
     // Initialize Lenis smooth scroll
@@ -41,6 +42,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/menu" element={<MenuPage />} />
+          <Route path="/locations" element={<LocationsPage />} />
         </Routes>
       </div>
     </BrowserRouter>

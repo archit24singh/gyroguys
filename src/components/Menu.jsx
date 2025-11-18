@@ -3,22 +3,22 @@ const Menu = () => {
     {
       name: 'Combo Bowl',
       img: '/assets/images/combo.avif',
-      description: 'The best of both worlds! A delicious blend of tender lamb and chicken gyro served over fluffy rice with fresh veggies and our signature tzatziki sauce.'
+      description: 'The best of both worlds! A delicious blend of tender lamb and chicken gyro served over fluffy rice with fresh veggies and our signature tzatziki sauce'
     },
     {
       name: 'Lamb Gyro',
       img: '/assets/images/lambgyro.avif',
-      description: 'Our signature dish! Perfectly seasoned lamb gyro wrapped in warm pita bread with crisp lettuce, tomatoes, onions, and creamy tzatziki sauce.'
+      description: 'Our signature dish! Perfectly seasoned lamb gyro wrapped in warm pita bread with crisp lettuce, tomatoes, onions, and creamy tzatziki sauce'
     },
     {
       name: 'Chicken Bowl',
       img: '/assets/images/chickenbowl.avif',
-      description: 'Tender marinated chicken served over a bed of rice with fresh vegetables, topped with our house-made tzatziki and a drizzle of olive oil.'
+      description: 'Tender marinated chicken served over a bed of rice with fresh vegetables, topped with our house-made tzatziki and a drizzle of olive oil'
     },
     {
       name: 'Chicken Wrap',
       img: '/assets/images/chickenwrap.avif',
-      description: 'Juicy grilled chicken wrapped in soft pita with fresh veggies and our special sauce. Perfect for a quick, satisfying meal on the go.'
+      description: 'Juicy grilled chicken wrapped in soft pita with fresh veggies and our special sauce. Perfect for a quick, satisfying meal on the go'
     },
     {
       name: 'Lamb Fries',
@@ -28,28 +28,57 @@ const Menu = () => {
     {
       name: 'Baklava',
       img: '/assets/images/baklava.avif',
-      description: 'Traditional Greek dessert made with layers of flaky phyllo dough, honey, and crushed nuts. The perfect sweet ending to your meal.'
+      description: 'Traditional Greek dessert made with layers of flaky phyllo dough, honey, and crushed nuts. The perfect sweet ending to your meal'
+    },
+    {
+      name: 'Special Chicken Wrap',
+      img: '/assets/images/special_chicken_wrap.png',
+      description: 'Tender chicken, creamy garlic sauce, crunchy cucumber pickles, wrapped in flatbread. Comes with white and hot sauces for dipping.'
+    },
+    {
+      name: 'Hummus',
+      img: '/assets/images/hummus.png',
+    },
+    {
+      name: 'The Greek Salad',
+      img: '/assets/images/gcsalad.png',
+      description: 'Fresh Green leaf lettuce, onion, tomatoes,cucumber,olives, feta cheese with white creamy sauce'
+    },
+    {
+      name: 'Pita',
+      img: '/assets/images/pita_bread.png',
+      description: 'Hot full pita cutted in half'
+    },
+    {
+      name: 'Chicken Tikka Bowl',
+      img: '/assets/images/chicken_tikka_bowl.png',
+      description: 'Quarter leg piece chicken, brown rice, fresh green leaf lettuce, onions, tomatoes, cucumber and GG sauce with hot sauce'
+    },
+    {
+      name: 'Chicken Quesadilla',
+      img: '/assets/images/quesedilla.png',
+      description: 'Well marinated chicken with cheese , grilled in a flat bread tortilla'
     }
   ];
 
   return (
     <section className="relative overflow-hidden text-white pb-16 px-8">
         {/* Page Title */}
-        <div className="max-w-6xl mx-auto mb-16">
+        <div className="max-w-6xl mx-auto mb-16 flex flex-col items-center">
           <h1 className="font-display text-5xl md:text-6xl lg:text-8xl font-bold text-center mb-6 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-600">
             Our Menu
           </h1>
-          <p className="font-body text-xl md:text-2xl text-white/80 text-center max-w-3xl mx-auto">
+          <p className="font-body text-xl md:text-2xl text-white/80 text-center max-w-3xl">
             Discover our authentic Greek flavors. Every dish is made fresh with premium ingredients and traditional recipes.
           </p>
         </div>
 
         {/* Menu Items List */}
-        <div className="max-w-5xl mx-auto space-y-12">
+        <div className="w-full max-w-6xl mx-auto space-y-12">
           {menuItems.map((item, index) => (
             <div
               key={index}
-              className="bg-gray-800/50 rounded-2xl overflow-hidden shadow-2xl hover:shadow-orange-500/20 transition-all duration-300 hover:scale-[1.02]"
+              className="w-full bg-gray-800/50 rounded-2xl overflow-hidden shadow-2xl hover:shadow-orange-500/20 transition-all duration-300 hover:scale-[1.02]"
             >
               <div className="grid md:grid-cols-2 gap-0">
                 {/* Image */}

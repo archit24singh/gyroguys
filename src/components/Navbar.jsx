@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,10 +17,14 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Check if we're on the locations page
+  const isLocationsPage = location.pathname === '/locations';
+  const shouldShowNavbar = isLocationsPage || hasScrolled;
+
   return (
     <nav
       className={`navbar fixed top-0 left-0 w-full z-50 flex justify-between items-center p-6 bg-transparent transition-all duration-500 ease-out ${
-        hasScrolled ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+        shouldShowNavbar ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
       }`}
     >
       {/* Logo */}
@@ -32,8 +37,8 @@ const Navbar = () => {
         <Link to="/menu" className="font-body text-lg text-white hover:text-orange-400 transition-colors">
           Menu
         </Link>
-        <Link to="/#location" className="font-body text-lg text-white hover:text-orange-400 transition-colors">
-          Location
+        <Link to="/locations" className="font-body text-lg text-white hover:text-orange-400 transition-colors">
+          Locations
         </Link>
         <a
           href="https://order.online/store/gyro-guys-houston-441834/?hideModal=true"
@@ -87,11 +92,11 @@ const Navbar = () => {
               Menu
             </Link>
             <Link
-              to="/#location"
+              to="/locations"
               className="font-body text-xl text-white hover:text-orange-400 transition-colors"
               onClick={() => setIsOpen(false)}
             >
-              Location
+              Locations
             </Link>
             <a
               href="https://order.online/store/gyro-guys-houston-441834/?hideModal=true"
