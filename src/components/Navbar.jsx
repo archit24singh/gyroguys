@@ -28,8 +28,12 @@ const Navbar = () => {
       }`}
     >
       {/* Logo */}
-      <Link to="/" className="font-display text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-red-600">
-        THE GYRO GUYS
+      <Link to="/">
+        <img
+          src="/assets/icon/fa4347e1-a0da-4abb-9aff-a423b0a99ddf.png"
+          alt="The Gyro Guys"
+          className="h-12 w-auto"
+        />
       </Link>
 
       {/* Desktop Links */}
