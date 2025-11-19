@@ -118,7 +118,7 @@ const Footer = () => {
       </div>
 
       {/* Copyright */}
-      <div className="w-full max-w-6xl mx-auto pt-8 border-t border-white/10 text-center">
+      <div className="w-full max-w-6xl mx-auto pt-8 text-center">
         <p className="font-body text-base md:text-lg text-white/60">
           &copy; {new Date().getFullYear()} The Gyro Guys. All rights reserved.
         </p>
